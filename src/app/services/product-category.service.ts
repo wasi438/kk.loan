@@ -3,18 +3,22 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ProductCategory } from '../common/product-category';
+import { Constants } from '../constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductCategoryService {
 
-  private apiUrl = "http://a0214571ffcf8436aabbc5cd8c03c3a5-1667859194.ap-south-1.elb.amazonaws.com/api/product-category";
+  private rootUrl: string;
 
-  constructor(private httpClient: HttpClient) { }
+
+  constructor(private httpClient: HttpClient) { 
+    this.rootUrl = `${Constants.BACKEND_API_URL}`;
+  }
 
   getProductCategories(): Observable<ProductCategory[]> {
-    return this.httpClient.get<GetResponseProductCategory>(this.apiUrl)
+    return this.httpClient.get<GetResponseProductCategory>(`${this.rootUrl}/api/product-category`)
       .pipe(map(response => response._embedded.productCategories));
   }
 }
